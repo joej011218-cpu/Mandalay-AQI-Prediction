@@ -1,0 +1,17 @@
+{
+  "training_script": "train_mandalay_cpcb_delta24.py",
+  "training_script_sha256": "a3d7ff87f69cd5b2cc1ed38344fd0fb5f02590149750fc94d682d05991593f07",
+  "dashboard_repository": "https://github.com/joej011218-cpu/Mandalay-AQI-Dashboard",
+  "dashboard_commit": "8480f6d263b54ac36731dbfd595e2909a95f4fed",
+  "cpcb_sha256": "d9164a850863d26e8db1199e1c4e91acd786416201ada237794277bf832c0584",
+  "feature_functions": "calculate_targets and build_features copied verbatim, relative import adjusted; no training code",
+  "local_training_notebook": "training/Mandalay_CPCB_XGBoost_Delta24_Colab.ipynb",
+  "local_training_notebook_sha256": "7ed2f70d9e0f5efa8d0039e126ca2faeff49de2900d75ee92afc64ad5c2d7d45",
+  "notebook_feature_functions_exact_ast_match": true,
+  "original_ui": {
+    "prediction": "9ffbcc76ac2355c8008911b1b501300d2f1966498e67dbf744bb0e031c8eec1c",
+    "precautions": "0d1fd3f56179864b6d0c2cf130a30dfdd32147bc4b7dcc466e987d2baf7d9211"
+  },
+  "chart_js_version": "4.5.1",
+  "chart_js_sha256": "48444a82d4edcb5bec0f1965faacdde18d9c17db3063d042abada2f705c9f54a"
+}

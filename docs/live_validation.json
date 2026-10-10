@@ -1,0 +1,669 @@
+{
+  "database_integration": "tested successfully, existing PostgreSQL",
+  "transaction_read_only": "on",
+  "endpoints": [
+    {
+      "endpoint": "/api/health",
+      "http_status": 200
+    },
+    {
+      "endpoint": "/api/latest",
+      "http_status": 200
+    },
+    {
+      "endpoint": "/api/prediction/status",
+      "http_status": 200
+    },
+    {
+      "endpoint": "/api/prediction",
+      "http_status": 200
+    }
+  ],
+  "observations_retrieved": 192,
+  "schema": [
+    {
+      "table": "mandalay_cpcb_aqi",
+      "column": "timestamp",
+      "type": "timestamp with time zone",
+      "nullable": "NO"
+    },
+    {
+      "table": "mandalay_cpcb_aqi",
+      "column": "cpcb_aqi",
+      "type": "integer",
+      "nullable": "YES"
+    },
+    {
+      "table": "mandalay_cpcb_aqi",
+      "column": "status",
+      "type": "character varying",
+      "nullable": "NO"
+    },
+    {
+      "table": "mandalay_cpcb_aqi",
+      "column": "calculation_version",
+      "type": "character varying",
+      "nullable": "NO"
+    },
+    {
+      "table": "mandalay_cpcb_aqi",
+      "column": "calculated_at",
+      "type": "timestamp with time zone",
+      "nullable": "NO"
+    },
+    {
+      "table": "mandalay_cpcb_aqi",
+      "column": "details",
+      "type": "jsonb",
+      "nullable": "NO"
+    },
+    {
+      "table": "mandalay_readings",
+      "column": "timestamp",
+      "type": "timestamp with time zone",
+      "nullable": "NO"
+    },
+    {
+      "table": "mandalay_readings",
+      "column": "pm2_5",
+      "type": "double precision",
+      "nullable": "YES"
+    },
+    {
+      "table": "mandalay_readings",
+      "column": "pm10",
+      "type": "double precision",
+      "nullable": "YES"
+    },
+    {
+      "table": "mandalay_readings",
+      "column": "carbon_monoxide",
+      "type": "double precision",
+      "nullable": "YES"
+    },
+    {
+      "table": "mandalay_readings",
+      "column": "nitrogen_dioxide",
+      "type": "double precision",
+      "nullable": "YES"
+    },
+    {
+      "table": "mandalay_readings",
+      "column": "sulphur_dioxide",
+      "type": "double precision",
+      "nullable": "YES"
+    },
+    {
+      "table": "mandalay_readings",
+      "column": "ozone",
+      "type": "double precision",
+      "nullable": "YES"
+    },
+    {
+      "table": "mandalay_readings",
+      "column": "us_aqi",
+      "type": "double precision",
+      "nullable": "YES"
+    },
+    {
+      "table": "mandalay_readings",
+      "column": "source",
+      "type": "character varying",
+      "nullable": "NO"
+    },
+    {
+      "table": "mandalay_source_observations",
+      "column": "timestamp",
+      "type": "timestamp with time zone",
+      "nullable": "NO"
+    },
+    {
+      "table": "mandalay_source_observations",
+      "column": "source_id",
+      "type": "character varying",
+      "nullable": "NO"
+    },
+    {
+      "table": "mandalay_source_observations",
+      "column": "original_values",
+      "type": "jsonb",
+      "nullable": "NO"
+    },
+    {
+      "table": "mandalay_source_observations",
+      "column": "provenance",
+      "type": "jsonb",
+      "nullable": "NO"
+    }
+  ],
+  "forecast": {
+    "city": "Mandalay, Myanmar",
+    "aqi_standard": "Indian CPCB AQI",
+    "calculation_version": "cpcb-2014-rolling-v1",
+    "timezone": "Asia/Yangon",
+    "modeled_data": true,
+    "data_source": "Existing Mandalay dashboard PostgreSQL / Open-Meteo CAMS",
+    "status": "stale",
+    "forecast_origin": "2026-10-10T13:00:00+06:30",
+    "generated_at": "2026-10-10T16:19:40.619347+06:30",
+    "current": {
+      "timestamp": "2026-10-10T13:00:00+06:30",
+      "pollutants": {
+        "pm2_5": {
+          "value": 8.6,
+          "unit": "\u00b5g/m\u00b3"
+        },
+        "pm10": {
+          "value": 8.7,
+          "unit": "\u00b5g/m\u00b3"
+        },
+        "carbon_monoxide": {
+          "value": 281.0,
+          "unit": "\u00b5g/m\u00b3"
+        },
+        "nitrogen_dioxide": {
+          "value": 0.8,
+          "unit": "\u00b5g/m\u00b3"
+        },
+        "sulphur_dioxide": {
+          "value": 1.6,
+          "unit": "\u00b5g/m\u00b3"
+        },
+        "ozone": {
+          "value": 90.0,
+          "unit": "\u00b5g/m\u00b3"
+        }
+      },
+      "source": "open-meteo-yangon",
+      "stale": true,
+      "age_hours": 3.33,
+      "data_cache_fallback": false,
+      "warning": null,
+      "cpcb_aqi": 68,
+      "category": "Satisfactory",
+      "color": "#A8C43A",
+      "dominant_pollutant": "ozone",
+      "dominant_pollutants": [
+        "ozone"
+      ],
+      "status": "available",
+      "reasons": [],
+      "eligible_pollutants": [
+        "pm2_5",
+        "pm10",
+        "carbon_monoxide",
+        "nitrogen_dioxide",
+        "sulphur_dioxide",
+        "ozone"
+      ],
+      "pollutant_details": {
+        "pm2_5": {
+          "averaging_hours": 24,
+          "valid_hours_24": 24,
+          "valid_hours_window": 24,
+          "unit": "\u00b5g/m\u00b3",
+          "average": 15.65416666666667,
+          "reported_concentration": 16.0,
+          "subindex": 27,
+          "eligible": true,
+          "reason": null
+        },
+        "pm10": {
+          "averaging_hours": 24,
+          "valid_hours_24": 24,
+          "valid_hours_window": 24,
+          "unit": "\u00b5g/m\u00b3",
+          "average": 15.862499999999997,
+          "reported_concentration": 16.0,
+          "subindex": 16,
+          "eligible": true,
+          "reason": null
+        },
+        "carbon_monoxide": {
+          "averaging_hours": 8,
+          "valid_hours_24": 24,
+          "valid_hours_window": 8,
+          "unit": "mg/m\u00b3",
+          "average": 0.3935,
+          "reported_concentration": 0.4,
+          "subindex": 20,
+          "eligible": true,
+          "reason": null
+        },
+        "nitrogen_dioxide": {
+          "averaging_hours": 24,
+          "valid_hours_24": 24,
+          "valid_hours_window": 24,
+          "unit": "\u00b5g/m\u00b3",
+          "average": 7.979166666666665,
+          "reported_concentration": 8.0,
+          "subindex": 10,
+          "eligible": true,
+          "reason": null
+        },
+        "sulphur_dioxide": {
+          "averaging_hours": 24,
+          "valid_hours_24": 24,
+          "valid_hours_window": 24,
+          "unit": "\u00b5g/m\u00b3",
+          "average": 3.579166666666667,
+          "reported_concentration": 4.0,
+          "subindex": 5,
+          "eligible": true,
+          "reason": null
+        },
+        "ozone": {
+          "averaging_hours": 8,
+          "valid_hours_24": 24,
+          "valid_hours_window": 8,
+          "unit": "\u00b5g/m\u00b3",
+          "average": 67.875,
+          "reported_concentration": 68.0,
+          "subindex": 68,
+          "eligible": true,
+          "reason": null
+        }
+      },
+      "severe_pollutants": [],
+      "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur.",
+      "calculation_version": "cpcb-2014-rolling-v1"
+    },
+    "forecasts": [
+      {
+        "horizon": 1,
+        "timestamp": "2026-10-10T14:00:00+06:30",
+        "predicted_delta": 10.090818405151367,
+        "raw_predicted_cpcb_aqi": 78.09081840515137,
+        "predicted_cpcb_aqi": 78.09081840515137,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 2,
+        "timestamp": "2026-10-10T15:00:00+06:30",
+        "predicted_delta": 16.642797470092773,
+        "raw_predicted_cpcb_aqi": 84.64279747009277,
+        "predicted_cpcb_aqi": 84.64279747009277,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 3,
+        "timestamp": "2026-10-10T16:00:00+06:30",
+        "predicted_delta": 21.490997314453125,
+        "raw_predicted_cpcb_aqi": 89.49099731445312,
+        "predicted_cpcb_aqi": 89.49099731445312,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 4,
+        "timestamp": "2026-10-10T17:00:00+06:30",
+        "predicted_delta": 18.77768898010254,
+        "raw_predicted_cpcb_aqi": 86.77768898010254,
+        "predicted_cpcb_aqi": 86.77768898010254,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 5,
+        "timestamp": "2026-10-10T18:00:00+06:30",
+        "predicted_delta": 11.156970977783203,
+        "raw_predicted_cpcb_aqi": 79.1569709777832,
+        "predicted_cpcb_aqi": 79.1569709777832,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 6,
+        "timestamp": "2026-10-10T19:00:00+06:30",
+        "predicted_delta": 6.690510272979736,
+        "raw_predicted_cpcb_aqi": 74.69051027297974,
+        "predicted_cpcb_aqi": 74.69051027297974,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 7,
+        "timestamp": "2026-10-10T20:00:00+06:30",
+        "predicted_delta": 2.8235440254211426,
+        "raw_predicted_cpcb_aqi": 70.82354402542114,
+        "predicted_cpcb_aqi": 70.82354402542114,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 8,
+        "timestamp": "2026-10-10T21:00:00+06:30",
+        "predicted_delta": -3.2025697231292725,
+        "raw_predicted_cpcb_aqi": 64.79743027687073,
+        "predicted_cpcb_aqi": 64.79743027687073,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 9,
+        "timestamp": "2026-10-10T22:00:00+06:30",
+        "predicted_delta": -5.922599792480469,
+        "raw_predicted_cpcb_aqi": 62.07740020751953,
+        "predicted_cpcb_aqi": 62.07740020751953,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 10,
+        "timestamp": "2026-10-10T23:00:00+06:30",
+        "predicted_delta": -11.792320251464844,
+        "raw_predicted_cpcb_aqi": 56.207679748535156,
+        "predicted_cpcb_aqi": 56.207679748535156,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 11,
+        "timestamp": "2026-10-11T00:00:00+06:30",
+        "predicted_delta": -15.023215293884277,
+        "raw_predicted_cpcb_aqi": 52.97678470611572,
+        "predicted_cpcb_aqi": 52.97678470611572,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 12,
+        "timestamp": "2026-10-11T01:00:00+06:30",
+        "predicted_delta": -20.012184143066406,
+        "raw_predicted_cpcb_aqi": 47.987815856933594,
+        "predicted_cpcb_aqi": 47.987815856933594,
+        "clipped": false,
+        "category": "Good",
+        "color": "#4E9F3D",
+        "precautions": "Normal outdoor activities can continue."
+      },
+      {
+        "horizon": 13,
+        "timestamp": "2026-10-11T02:00:00+06:30",
+        "predicted_delta": -25.857196807861328,
+        "raw_predicted_cpcb_aqi": 42.14280319213867,
+        "predicted_cpcb_aqi": 42.14280319213867,
+        "clipped": false,
+        "category": "Good",
+        "color": "#4E9F3D",
+        "precautions": "Normal outdoor activities can continue."
+      },
+      {
+        "horizon": 14,
+        "timestamp": "2026-10-11T03:00:00+06:30",
+        "predicted_delta": -23.32670783996582,
+        "raw_predicted_cpcb_aqi": 44.67329216003418,
+        "predicted_cpcb_aqi": 44.67329216003418,
+        "clipped": false,
+        "category": "Good",
+        "color": "#4E9F3D",
+        "precautions": "Normal outdoor activities can continue."
+      },
+      {
+        "horizon": 15,
+        "timestamp": "2026-10-11T04:00:00+06:30",
+        "predicted_delta": -28.39304542541504,
+        "raw_predicted_cpcb_aqi": 39.60695457458496,
+        "predicted_cpcb_aqi": 39.60695457458496,
+        "clipped": false,
+        "category": "Good",
+        "color": "#4E9F3D",
+        "precautions": "Normal outdoor activities can continue."
+      },
+      {
+        "horizon": 16,
+        "timestamp": "2026-10-11T05:00:00+06:30",
+        "predicted_delta": -26.542442321777344,
+        "raw_predicted_cpcb_aqi": 41.457557678222656,
+        "predicted_cpcb_aqi": 41.457557678222656,
+        "clipped": false,
+        "category": "Good",
+        "color": "#4E9F3D",
+        "precautions": "Normal outdoor activities can continue."
+      },
+      {
+        "horizon": 17,
+        "timestamp": "2026-10-11T06:00:00+06:30",
+        "predicted_delta": -27.1275634765625,
+        "raw_predicted_cpcb_aqi": 40.8724365234375,
+        "predicted_cpcb_aqi": 40.8724365234375,
+        "clipped": false,
+        "category": "Good",
+        "color": "#4E9F3D",
+        "precautions": "Normal outdoor activities can continue."
+      },
+      {
+        "horizon": 18,
+        "timestamp": "2026-10-11T07:00:00+06:30",
+        "predicted_delta": -28.501441955566406,
+        "raw_predicted_cpcb_aqi": 39.498558044433594,
+        "predicted_cpcb_aqi": 39.498558044433594,
+        "clipped": false,
+        "category": "Good",
+        "color": "#4E9F3D",
+        "precautions": "Normal outdoor activities can continue."
+      },
+      {
+        "horizon": 19,
+        "timestamp": "2026-10-11T08:00:00+06:30",
+        "predicted_delta": -31.54728126525879,
+        "raw_predicted_cpcb_aqi": 36.45271873474121,
+        "predicted_cpcb_aqi": 36.45271873474121,
+        "clipped": false,
+        "category": "Good",
+        "color": "#4E9F3D",
+        "precautions": "Normal outdoor activities can continue."
+      },
+      {
+        "horizon": 20,
+        "timestamp": "2026-10-11T09:00:00+06:30",
+        "predicted_delta": -27.209217071533203,
+        "raw_predicted_cpcb_aqi": 40.7907829284668,
+        "predicted_cpcb_aqi": 40.7907829284668,
+        "clipped": false,
+        "category": "Good",
+        "color": "#4E9F3D",
+        "precautions": "Normal outdoor activities can continue."
+      },
+      {
+        "horizon": 21,
+        "timestamp": "2026-10-11T10:00:00+06:30",
+        "predicted_delta": -21.083885192871094,
+        "raw_predicted_cpcb_aqi": 46.916114807128906,
+        "predicted_cpcb_aqi": 46.916114807128906,
+        "clipped": false,
+        "category": "Good",
+        "color": "#4E9F3D",
+        "precautions": "Normal outdoor activities can continue."
+      },
+      {
+        "horizon": 22,
+        "timestamp": "2026-10-11T11:00:00+06:30",
+        "predicted_delta": -13.680028915405273,
+        "raw_predicted_cpcb_aqi": 54.31997108459473,
+        "predicted_cpcb_aqi": 54.31997108459473,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 23,
+        "timestamp": "2026-10-11T12:00:00+06:30",
+        "predicted_delta": -5.857594966888428,
+        "raw_predicted_cpcb_aqi": 62.14240503311157,
+        "predicted_cpcb_aqi": 62.14240503311157,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      },
+      {
+        "horizon": 24,
+        "timestamp": "2026-10-11T13:00:00+06:30",
+        "predicted_delta": 5.58530855178833,
+        "raw_predicted_cpcb_aqi": 73.58530855178833,
+        "predicted_cpcb_aqi": 73.58530855178833,
+        "clipped": false,
+        "category": "Satisfactory",
+        "color": "#A8C43A",
+        "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur."
+      }
+    ],
+    "feature_count": 198,
+    "model_version": "bc18fbba83c12361c5de00200e8e501ca7995e4cb1a0d0ae61a396f01c02d7e9",
+    "stale": true,
+    "cached": true,
+    "warnings": [
+      "Stale data: forecast origin is 3.33 hours old; forecast times remain anchored to the delayed observation"
+    ],
+    "limitation": "Modeled CAMS data; model forecast, not an official station AQI. No prediction intervals are available.",
+    "latest_observation": {
+      "timestamp": "2026-10-10T13:00:00+06:30",
+      "pollutants": {
+        "pm2_5": {
+          "value": 8.6,
+          "unit": "\u00b5g/m\u00b3"
+        },
+        "pm10": {
+          "value": 8.7,
+          "unit": "\u00b5g/m\u00b3"
+        },
+        "carbon_monoxide": {
+          "value": 281.0,
+          "unit": "\u00b5g/m\u00b3"
+        },
+        "nitrogen_dioxide": {
+          "value": 0.8,
+          "unit": "\u00b5g/m\u00b3"
+        },
+        "sulphur_dioxide": {
+          "value": 1.6,
+          "unit": "\u00b5g/m\u00b3"
+        },
+        "ozone": {
+          "value": 90.0,
+          "unit": "\u00b5g/m\u00b3"
+        }
+      },
+      "source": "open-meteo-yangon",
+      "stale": true,
+      "age_hours": 3.33,
+      "data_cache_fallback": false,
+      "warning": null,
+      "cpcb_aqi": 68,
+      "category": "Satisfactory",
+      "color": "#A8C43A",
+      "dominant_pollutant": "ozone",
+      "dominant_pollutants": [
+        "ozone"
+      ],
+      "status": "available",
+      "reasons": [],
+      "eligible_pollutants": [
+        "pm2_5",
+        "pm10",
+        "carbon_monoxide",
+        "nitrogen_dioxide",
+        "sulphur_dioxide",
+        "ozone"
+      ],
+      "pollutant_details": {
+        "pm2_5": {
+          "averaging_hours": 24,
+          "valid_hours_24": 24,
+          "valid_hours_window": 24,
+          "unit": "\u00b5g/m\u00b3",
+          "average": 15.65416666666667,
+          "reported_concentration": 16.0,
+          "subindex": 27,
+          "eligible": true,
+          "reason": null
+        },
+        "pm10": {
+          "averaging_hours": 24,
+          "valid_hours_24": 24,
+          "valid_hours_window": 24,
+          "unit": "\u00b5g/m\u00b3",
+          "average": 15.862499999999997,
+          "reported_concentration": 16.0,
+          "subindex": 16,
+          "eligible": true,
+          "reason": null
+        },
+        "carbon_monoxide": {
+          "averaging_hours": 8,
+          "valid_hours_24": 24,
+          "valid_hours_window": 8,
+          "unit": "mg/m\u00b3",
+          "average": 0.3935,
+          "reported_concentration": 0.4,
+          "subindex": 20,
+          "eligible": true,
+          "reason": null
+        },
+        "nitrogen_dioxide": {
+          "averaging_hours": 24,
+          "valid_hours_24": 24,
+          "valid_hours_window": 24,
+          "unit": "\u00b5g/m\u00b3",
+          "average": 7.979166666666665,
+          "reported_concentration": 8.0,
+          "subindex": 10,
+          "eligible": true,
+          "reason": null
+        },
+        "sulphur_dioxide": {
+          "averaging_hours": 24,
+          "valid_hours_24": 24,
+          "valid_hours_window": 24,
+          "unit": "\u00b5g/m\u00b3",
+          "average": 3.579166666666667,
+          "reported_concentration": 4.0,
+          "subindex": 5,
+          "eligible": true,
+          "reason": null
+        },
+        "ozone": {
+          "averaging_hours": 8,
+          "valid_hours_24": 24,
+          "valid_hours_window": 8,
+          "unit": "\u00b5g/m\u00b3",
+          "average": 67.875,
+          "reported_concentration": 68.0,
+          "subindex": 68,
+          "eligible": true,
+          "reason": null
+        }
+      },
+      "severe_pollutants": [],
+      "precautions": "Sensitive people should monitor for breathing discomfort and reduce prolonged exertion if symptoms occur.",
+      "calculation_version": "cpcb-2014-rolling-v1"
+    },
+    "forecast_age_hours": 3.33
+  }
+}
