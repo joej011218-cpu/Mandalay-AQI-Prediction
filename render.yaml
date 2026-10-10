@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: mandalay-cpcb-prediction
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt && python scripts/check_deployment.py && python scripts/validate_models.py
+    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.11
+      - key: DATABASE_URL
+        sync: false
+      - key: MODEL_DIR
+        value: models/XGB_Mandalay_CPCB_Delta24_2026
+      - key: MANDALAY_DASHBOARD_URL
+        value: https://mandalay-aqi-dashboard-bk49.onrender.com/
+      - key: VADODARA_DASHBOARD_URL
+        value: https://aiot-public-dashboard-2.onrender.com/

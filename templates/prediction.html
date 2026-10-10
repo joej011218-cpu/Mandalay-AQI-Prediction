@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mandalay 24-Hour AQI Prediction</title>
+<link rel="stylesheet" href="/static/style.css">
+<script defer src="/static/vendor/chart.umd.min.js"></script>
+<script defer src="/static/clock.js"></script>
+<script defer src="/static/app.js"></script>
+</head>
+<body>
+<div class="page">
+  <div class="top-row">
+    <div class="page-header">
+      <h1>Mandalay 24-Hour AQI Prediction</h1>
+      <div id="liveClock" class="live-clock">—</div>
+    </div>
+    <button
+      id="themeToggle"
+      class="theme-toggle"
+      type="button"
+      aria-label="Toggle light and dark mode"
+    >
+      ☀️ Light Mode
+    </button>
+  </div>
+<nav class="page-nav" aria-label="Dashboard navigation">
+<a class="nav-link" href="{{ mandalay_url }}">Mandalay Dashboard</a>
+<a class="nav-link active" href="/prediction.html">Mandalay Prediction</a>
+<a class="nav-link" href="{{ vadodara_url }}">Vadodara Dashboard</a>
+<a class="nav-link" href="/precautions.html">AQI Categories &amp; Precautions</a>
+</nav>
+  <div id="dataFreshness" class="data-freshness" role="status" aria-live="polite">Mandalay, Myanmar · Checking data freshness…</div>
+  <!-- ======================================================
+       CURRENT CPCB REFERENCE
+  \======================================================= -->
+  <div class="panel">
+    <div class="panel-title">
+      Current Air Quality
+    </div>
+    <div class="panel-subtitle">
+      Mandalay, Myanmar · Latest Open-Meteo CAMS Global pollutant concentrations and calculated CPCB-style AQI estimate
+    </div>
+    <div class="current-grid">
+      <div class="current-box">
+        <div class="current-label">
+          Current AQI
+        </div>
+        <div
+          id="currentAQI"
+          class="current-aqi"
+        >
+          —
+        </div>
+        <div
+          id="currentCategory"
+          class="current-category"
+        >
+          —
+        </div>
+        <div
+          id="currentTime"
+          class="current-time"
+        >
+          —
+        </div>
+      </div>
+      <div class="pollutants">
+        <div class="pollutant">
+          <div class="pollutant-name">PM2.5</div>
+          <div id="pm25" class="pollutant-value">—</div>
+        </div>
+        <div class="pollutant">
+          <div class="pollutant-name">PM10</div>
+          <div id="pm10" class="pollutant-value">—</div>
+        </div>
+        <div class="pollutant">
+          <div class="pollutant-name">NO₂</div>
+          <div id="no2" class="pollutant-value">—</div>
+        </div>
+        <div class="pollutant">
+          <div class="pollutant-name">O₃</div>
+          <div id="o3" class="pollutant-value">—</div>
+        </div>
+        <div class="pollutant">
+          <div class="pollutant-name">SO₂</div>
+          <div id="so2" class="pollutant-value">—</div>
+        </div>
+        <div class="pollutant">
+          <div class="pollutant-name">CO</div>
+          <div id="co" class="pollutant-value">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ======================================================
+       24-HOUR FORECAST
+  \======================================================= -->
+  <div class="panel">
+    <div class="panel-title">
+      24-Hour AQI Forecast
+    </div>
+    <div class="panel-subtitle">
+      Predicted AQI for the next 1 to 24 hours
+    </div>
+    <div
+      id="forecastSummary"
+      class="forecast-summary"
+      style="display:none;"
+    >
+      <div class="summary-card">
+        <div class="summary-hour">+1 Hour</div>
+        <div id="aqi1" class="summary-value">—</div>
+        <div id="cat1" class="summary-category">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-hour">+6 Hours</div>
+        <div id="aqi6" class="summary-value">—</div>
+        <div id="cat6" class="summary-category">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-hour">+12 Hours</div>
+        <div id="aqi12" class="summary-value">—</div>
+        <div id="cat12" class="summary-category">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-hour">+24 Hours</div>
+        <div id="aqi24" class="summary-value">—</div>
+        <div id="cat24" class="summary-category">—</div>
+      </div>
+    </div>
+    <div id="forecastLoading" class="loading">
+      Loading 24-hour AQI prediction...
+    </div>
+  </div>
+  <!-- ======================================================
+       1 TO 24 HOUR FORECAST TABLE
+  \======================================================= -->
+  <div class="panel">
+    <div class="panel-title">
+      1–24 Hour Forecast Results
+    </div>
+    <div class="panel-subtitle">
+      Hourly AQI predictions from the forecasting model
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Horizon</th>
+            <th>Forecast Time</th>
+            <th>Predicted AQI</th>
+            <th>Change</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody id="forecastTableBody"></tbody>
+      </table>
+    </div>
+    <div
+      id="chartWrapper"
+      class="chart-container"
+      style="display:none; margin-top:24px;"
+    >
+      <canvas id="forecastChart" role="img" aria-label="24-hour CPCB forecast; values available in hourly table"></canvas>
+    </div>
+    <div id="forecastOrigin" class="forecast-origin">
+      —
+    </div>
+  </div>
+  <div id="precautionModal" class="precaution-modal" role="dialog" aria-modal="true" aria-labelledby="precautionHeading">
+    <div class="precaution-card">
+      <button id="precautionClose" class="precaution-close" type="button" aria-label="Close health precautions">×</button>
+      <div id="precautionHeading" class="precaution-heading">Health Precautions</div>
+      <div class="precaution-status">
+        <span id="precautionCategory" class="precaution-category">—</span>
+        <span id="precautionAQI" class="precaution-aqi">Predicted AQI: —</span>
+      </div>
+      <div id="precautionMessage" class="precaution-message">—</div>
+      <ul id="precautionList" class="precaution-list"></ul>
+      <div id="precautionMeta" class="precaution-meta">—</div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Data & Model Information</div>
+    <div class="panel-subtitle" style="margin-bottom:0; line-height:1.7;">
+      Source: Open-Meteo CAMS Global modeled air-quality data. The displayed AQI is a
+      CPCB-style AQI calculated from PM2.5, PM10, NO₂, SO₂, CO and O₃.
+      The 1–24 hour forecast uses 24 pretrained CPCB XGBoost Delta models and the latest stored Mandalay observation. This CPCB-style estimate comes from modeled pollutant data, not an official CPCB monitoring-station reading.
+    </div>
+  </div>
+
+  <div id="errorBox" class="error"></div>
+</div>
+</body>
+</html>

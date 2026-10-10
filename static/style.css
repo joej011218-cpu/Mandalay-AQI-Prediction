@@ -1,0 +1,1791 @@
+
+
+
+
+:root {
+
+
+
+  --bg: #12161A;
+
+
+
+  --panel: #1B2126;
+
+
+
+  --panel-border: #2A333A;
+
+
+
+  --text: #E8EDF0;
+
+
+
+  --text-muted: #8A97A0;
+
+
+
+  --table-hover: #151A1E;
+
+
+
+  --button-bg: #242C32;
+
+
+
+  --button-hover: #303A42;
+
+
+
+
+
+
+
+  --good: #4E9F3D;
+
+
+
+  --satisfactory: #A8C43A;
+
+
+
+  --moderate: #E8C547;
+
+
+
+  --poor: #E8823C;
+
+
+
+  --very-poor: #D8453B;
+
+
+
+  --severe: #7A2A2A;
+
+
+
+}
+
+
+
+
+
+
+
+body.light-mode {
+
+
+
+  --bg: #F4F6F8;
+
+
+
+  --panel: #FFFFFF;
+
+
+
+  --panel-border: #D9E0E5;
+
+
+
+  --text: #1D252B;
+
+
+
+  --text-muted: #66727B;
+
+
+
+  --table-hover: #F0F3F5;
+
+
+
+  --button-bg: #E9EEF2;
+
+
+
+  --button-hover: #DCE3E8;
+
+
+
+}
+
+
+
+
+
+
+
+* {
+
+
+
+  box-sizing: border-box;
+
+
+
+  margin: 0;
+
+
+
+  padding: 0;
+
+
+
+}
+
+
+
+
+
+
+
+body {
+
+
+
+  background: var(--bg);
+
+
+
+  color: var(--text);
+
+
+
+  font-family: Arial, sans-serif;
+
+
+
+  padding: 24px;
+
+
+
+  min-height: 100vh;
+
+
+
+  transition: background 0.25s ease, color 0.25s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.page {
+
+
+
+  width: 100%;
+
+
+
+  max-width: 1100px;
+
+
+
+  margin: 0 auto;
+
+
+
+}
+
+
+
+
+
+
+
+/* =========================================================
+
+
+
+   HEADER
+
+
+
+\========================================================= */
+
+
+
+
+
+
+
+.top-row {
+
+
+
+  position: relative;
+
+
+
+  margin-bottom: 24px;
+
+
+
+}
+
+
+
+
+
+
+
+.page-header {
+
+
+
+  text-align: center;
+
+
+
+}
+
+
+
+
+
+
+
+.page-header h1 {
+
+
+
+  font-size: 28px;
+
+
+
+  font-weight: 700;
+
+
+
+  margin-bottom: 7px;
+
+
+
+}
+
+
+
+
+
+
+
+.page-header p {
+
+
+
+  color: var(--text-muted);
+
+
+
+  font-size: 13px;
+
+
+
+}
+
+
+
+
+
+
+
+.live-clock {
+
+
+
+  margin-top: 10px;
+
+
+
+  color: var(--text);
+
+
+
+  font-size: 14px;
+
+
+
+  font-weight: 600;
+
+
+
+  letter-spacing: 0.2px;
+
+
+
+}
+
+
+
+
+
+
+
+.live-clock .clock-date {
+
+
+
+  color: var(--text-muted);
+
+
+
+  font-size: 12px;
+
+
+
+  font-weight: 400;
+
+
+
+  margin-left: 6px;
+
+
+
+}
+
+
+
+
+
+
+
+.theme-toggle {
+
+
+
+  position: absolute;
+
+
+
+  right: 0;
+
+
+
+  top: 0;
+
+
+
+  border: 1px solid var(--panel-border);
+
+
+
+  background: var(--button-bg);
+
+
+
+  color: var(--text);
+
+
+
+  border-radius: 8px;
+
+
+
+  padding: 9px 13px;
+
+
+
+  font-size: 12px;
+
+
+
+  font-weight: 600;
+
+
+
+  cursor: pointer;
+
+
+
+  transition: background 0.2s ease, border-color 0.2s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.theme-toggle:hover {
+
+
+
+  background: var(--button-hover);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+.page-nav{display:flex;justify-content:center;gap:10px;margin:18px 0 24px;flex-wrap:wrap}
+
+
+
+.nav-link{text-decoration:none;color:var(--text);background:var(--button-bg);border:1px solid var(--panel-border);border-radius:8px;padding:9px 14px;font-size:12px;font-weight:700}
+
+
+
+.nav-link:hover{background:var(--button-hover)}
+
+
+
+.nav-link.active{border-color:var(--satisfactory)}
+
+
+
+
+
+
+
+/* =========================================================
+
+
+
+   PANELS
+
+
+
+\========================================================= */
+
+
+
+
+
+
+
+.panel {
+
+
+
+  background: var(--panel);
+
+
+
+  border: 1px solid var(--panel-border);
+
+
+
+  border-radius: 10px;
+
+
+
+  padding: 24px;
+
+
+
+  margin-bottom: 18px;
+
+
+
+  transition: background 0.25s ease, border-color 0.25s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.panel-title {
+
+
+
+  font-size: 18px;
+
+
+
+  font-weight: 700;
+
+
+
+  margin-bottom: 5px;
+
+
+
+}
+
+
+
+
+
+
+
+.panel-subtitle {
+
+
+
+  color: var(--text-muted);
+
+
+
+  font-size: 12px;
+
+
+
+  margin-bottom: 20px;
+
+
+
+}
+
+
+
+
+
+
+
+/* =========================================================
+
+
+
+   FORECAST SUMMARY
+
+
+
+\========================================================= */
+
+
+
+
+
+
+
+.forecast-summary {
+
+
+
+  display: grid;
+
+
+
+  grid-template-columns: repeat(4, 1fr);
+
+
+
+  gap: 12px;
+
+
+
+  margin-bottom: 24px;
+
+
+
+}
+
+
+
+
+
+
+
+.summary-card {
+
+
+
+  background: var(--bg);
+
+
+
+  border: 1px solid var(--panel-border);
+
+
+
+  border-radius: 8px;
+
+
+
+  padding: 18px;
+
+
+
+  text-align: center;
+
+
+
+  transition: background 0.25s ease, border-color 0.25s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.summary-hour {
+
+
+
+  color: var(--text-muted);
+
+
+
+  font-size: 11px;
+
+
+
+  text-transform: uppercase;
+
+
+
+  margin-bottom: 8px;
+
+
+
+}
+
+
+
+
+
+
+
+.summary-value {
+
+
+
+  font-size: 34px;
+
+
+
+  font-weight: 700;
+
+
+
+  margin-bottom: 8px;
+
+
+
+}
+
+
+
+
+
+
+
+.summary-category {
+
+
+
+  display: inline-block;
+
+
+
+  padding: 5px 9px;
+
+
+
+  border-radius: 4px;
+
+
+
+  font-size: 10px;
+
+
+
+  font-weight: 700;
+
+
+
+  color: #FFFFFF;
+
+
+
+}
+
+
+
+
+
+
+
+/* =========================================================
+
+
+
+   CHART
+
+
+
+\========================================================= */
+
+
+
+
+
+
+
+.chart-container {
+
+
+
+  position: relative;
+
+
+
+  width: 100%;
+
+
+
+  height: 400px;
+
+
+
+}
+
+
+
+
+
+
+
+.forecast-origin {
+
+
+
+  color: var(--text-muted);
+
+
+
+  font-size: 11px;
+
+
+
+  text-align: right;
+
+
+
+  margin-top: 10px;
+
+
+
+}
+
+
+
+
+
+
+
+.loading {
+
+
+
+  text-align: center;
+
+
+
+  padding: 40px 10px;
+
+
+
+  color: var(--text-muted);
+
+
+
+  font-size: 12px;
+
+
+
+}
+
+
+
+
+
+
+
+/* =========================================================
+
+
+
+   TABLE
+
+
+
+\========================================================= */
+
+
+
+
+
+
+
+.table-wrapper {
+
+
+
+  overflow-x: auto;
+
+
+
+}
+
+
+
+
+
+
+
+table {
+
+
+
+  width: 100%;
+
+
+
+  border-collapse: collapse;
+
+
+
+}
+
+
+
+
+
+
+
+th {
+
+
+
+  color: var(--text-muted);
+
+
+
+  font-size: 10px;
+
+
+
+  text-transform: uppercase;
+
+
+
+  text-align: left;
+
+
+
+  padding: 11px 12px;
+
+
+
+  border-bottom: 1px solid var(--panel-border);
+
+
+
+}
+
+
+
+
+
+
+
+td {
+
+
+
+  font-size: 12px;
+
+
+
+  padding: 12px;
+
+
+
+  border-bottom: 1px solid var(--panel-border);
+
+
+
+}
+
+
+
+
+
+
+
+tbody tr:last-child td {
+
+
+
+  border-bottom: none;
+
+
+
+}
+
+
+
+
+
+
+
+tbody tr:hover {
+
+
+
+  background: var(--table-hover);
+
+
+
+}
+
+
+
+
+
+
+
+.aqi-value {
+
+
+
+  font-weight: 700;
+
+
+
+}
+
+
+
+
+
+
+
+.delta-positive {
+
+
+
+  color: #E8823C;
+
+
+
+  font-weight: 600;
+
+
+
+}
+
+
+
+
+
+
+
+.delta-negative {
+
+
+
+  color: #4E9F3D;
+
+
+
+  font-weight: 600;
+
+
+
+}
+
+
+
+
+
+
+
+/* =========================================================
+
+
+
+   CURRENT CPCB REFERENCE
+
+
+
+\========================================================= */
+
+
+
+
+
+
+
+.current-grid {
+
+
+
+  display: grid;
+
+
+
+  grid-template-columns: 220px 1fr;
+
+
+
+  gap: 25px;
+
+
+
+  align-items: center;
+
+
+
+}
+
+
+
+
+
+
+
+.current-box {
+
+
+
+  text-align: center;
+
+
+
+}
+
+
+
+
+
+
+
+.current-label {
+
+
+
+  color: var(--text-muted);
+
+
+
+  font-size: 11px;
+
+
+
+  text-transform: uppercase;
+
+
+
+  margin-bottom: 8px;
+
+
+
+}
+
+
+
+
+
+
+
+.current-aqi {
+
+
+
+  font-size: 46px;
+
+
+
+  font-weight: 700;
+
+
+
+  line-height: 1;
+
+
+
+  margin-bottom: 9px;
+
+
+
+}
+
+
+
+
+
+
+
+.current-category {
+
+
+
+  display: inline-block;
+
+
+
+  padding: 5px 9px;
+
+
+
+  border-radius: 4px;
+
+
+
+  color: #FFFFFF;
+
+
+
+  font-size: 10px;
+
+
+
+  font-weight: 700;
+
+
+
+}
+
+
+
+
+
+
+
+.current-time {
+
+
+
+  margin-top: 11px;
+
+
+
+  color: var(--text-muted);
+
+
+
+  font-size: 11px;
+
+
+
+}
+
+
+
+
+
+
+
+.pollutants {
+
+
+
+  display: grid;
+
+
+
+  grid-template-columns: repeat(4, 1fr);
+
+
+
+  gap: 10px;
+
+
+
+}
+
+
+
+
+
+
+
+.pollutant {
+
+
+
+  background: var(--bg);
+
+
+
+  border: 1px solid var(--panel-border);
+
+
+
+  border-radius: 7px;
+
+
+
+  padding: 13px;
+
+
+
+  transition: background 0.25s ease, border-color 0.25s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.pollutant-name {
+
+
+
+  color: var(--text-muted);
+
+
+
+  font-size: 10px;
+
+
+
+  margin-bottom: 6px;
+
+
+
+}
+
+
+
+
+
+
+
+.pollutant-value {
+
+
+
+  font-size: 15px;
+
+
+
+  font-weight: 700;
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/* HEALTH PRECAUTION MODAL */
+
+
+
+.category-button {
+
+
+
+  display:inline-block; border:none; border-radius:5px; padding:6px 10px;
+
+
+
+  color:#fff; font-size:10px; font-weight:700; cursor:pointer;
+
+
+
+  transition:transform .15s ease, opacity .15s ease;
+
+
+
+}
+
+
+
+.category-button:hover { transform:translateY(-1px); opacity:.9; }
+
+
+
+.category-button:focus { outline:2px solid var(--text); outline-offset:2px; }
+
+
+
+.summary-category { cursor:pointer; }
+
+
+
+.precaution-modal {
+
+
+
+  display:none; position:fixed; inset:0; z-index:9999;
+
+
+
+  background:rgba(0,0,0,.68); padding:20px; align-items:center; justify-content:center;
+
+
+
+}
+
+
+
+.precaution-modal.show { display:flex; }
+
+
+
+.precaution-card {
+
+
+
+  position:relative; width:min(620px,100%); max-height:90vh; overflow-y:auto;
+
+
+
+  background:var(--panel); border:1px solid var(--panel-border); border-radius:14px;
+
+
+
+  padding:26px; box-shadow:0 22px 60px rgba(0,0,0,.35);
+
+
+
+}
+
+
+
+.precaution-close {
+
+
+
+  position:absolute; top:14px; right:14px; width:34px; height:34px;
+
+
+
+  border:1px solid var(--panel-border); border-radius:50%; background:var(--button-bg);
+
+
+
+  color:var(--text); font-size:20px; cursor:pointer;
+
+
+
+}
+
+
+
+.precaution-close:hover { background:var(--button-hover); }
+
+
+
+.precaution-heading { font-size:20px; font-weight:700; padding-right:44px; margin-bottom:18px; }
+
+
+
+.precaution-status { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
+
+
+
+.precaution-category { display:inline-block; padding:7px 11px; border-radius:5px; color:#fff; font-size:12px; font-weight:700; text-transform:uppercase; }
+
+
+
+.precaution-aqi { font-size:13px; font-weight:700; }
+
+
+
+.precaution-message { font-size:14px; line-height:1.6; margin-bottom:16px; }
+
+
+
+.precaution-list { list-style:none; margin:0 0 18px; padding:0; }
+
+
+
+.precaution-list li { position:relative; padding:8px 0 8px 25px; font-size:13px; line-height:1.5; border-bottom:1px solid var(--panel-border); }
+
+
+
+.precaution-list li:last-child { border-bottom:none; }
+
+
+
+.precaution-list li::before { content:"✓"; position:absolute; left:0; top:8px; font-weight:700; }
+
+
+
+.precaution-meta { background:var(--bg); border:1px solid var(--panel-border); border-radius:8px; padding:12px 14px; color:var(--text-muted); font-size:11px; line-height:1.6; }
+
+
+
+@media (max-width:520px) {
+
+
+
+  .precaution-card { padding:22px 16px 18px; }
+
+
+
+  .precaution-status { align-items:flex-start; flex-direction:column; }
+
+
+
+}
+
+
+
+
+
+
+
+/* =========================================================
+
+
+
+   ERROR
+
+
+
+\========================================================= */
+
+
+
+
+
+
+
+.error {
+
+
+
+  display: none;
+
+
+
+  background: var(--panel);
+
+
+
+  border: 1px solid var(--panel-border);
+
+
+
+  border-radius: 8px;
+
+
+
+  padding: 15px;
+
+
+
+  color: #ff6b6b;
+
+
+
+  font-size: 12px;
+
+
+
+  margin-bottom: 18px;
+
+
+
+}
+
+
+
+
+
+
+
+/* =========================================================
+
+
+
+   RESPONSIVE
+
+
+
+\========================================================= */
+
+
+
+
+
+
+
+@media (max-width: 850px) {
+
+
+
+
+
+
+
+  .forecast-summary {
+
+
+
+    grid-template-columns: repeat(2, 1fr);
+
+
+
+  }
+
+
+
+
+
+
+
+  .current-grid {
+
+
+
+    grid-template-columns: 1fr;
+
+
+
+  }
+
+
+
+
+
+
+
+  .pollutants {
+
+
+
+    grid-template-columns: repeat(2, 1fr);
+
+
+
+  }
+
+
+
+
+
+
+
+  .live-clock {
+
+
+
+  margin-top: 10px;
+
+
+
+  color: var(--text);
+
+
+
+  font-size: 14px;
+
+
+
+  font-weight: 600;
+
+
+
+  letter-spacing: 0.2px;
+
+
+
+}
+
+
+
+
+
+
+
+.live-clock .clock-date {
+
+
+
+  color: var(--text-muted);
+
+
+
+  font-size: 12px;
+
+
+
+  font-weight: 400;
+
+
+
+  margin-left: 6px;
+
+
+
+}
+
+
+
+
+
+
+
+.theme-toggle {
+
+
+
+    position: static;
+
+
+
+    display: block;
+
+
+
+    margin: 14px auto 0;
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+
+
+@media (max-width: 520px) {
+
+
+
+
+
+
+
+  body {
+
+
+
+    padding: 12px;
+
+
+
+  }
+
+
+
+
+
+
+
+  .panel {
+
+
+
+    padding: 16px;
+
+
+
+  }
+
+
+
+
+
+
+
+  .forecast-summary {
+
+
+
+    grid-template-columns: repeat(2, 1fr);
+
+
+
+  }
+
+
+
+
+
+
+
+  .chart-container {
+
+
+
+    height: 300px;
+
+
+
+  }
+
+
+
+
+
+
+
+  .page-header h1 {
+
+
+
+    font-size: 22px;
+
+
+
+  }
+
+
+
+
+
+
+
+  .summary-value {
+
+
+
+    font-size: 27px;
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+.data-freshness{font-size:12px;color:var(--text-muted);line-height:1.7;margin-bottom:18px}.data-freshness.stale{color:#E8823C}.summary-category[role="button"]:focus,.current-category[role="button"]:focus{outline:2px solid var(--text);outline-offset:3px}
