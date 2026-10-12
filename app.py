@@ -6,8 +6,7 @@ from flask import Flask, jsonify, render_template
 from prediction.database import ObservationStore
 from prediction.features import DataUnavailable
 from prediction.models import ModelRegistry, DEFAULT_ROOT
-from prediction.service import ForecastService, META, RefreshLimited
-from prediction.source_refresh import refresh_source, SourceRefreshError
+from prediction.service import ForecastService, META
 
 load_dotenv(Path(__file__).resolve().parent / '.env', override=False)
 
@@ -59,25 +58,6 @@ def create_app(service=None):
     @app.get('/api/forecast')
     def prediction():
         return jsonify(service.forecast())
-
-    @app.post('/api/prediction/refresh')
-    def refresh_prediction():
-        try:
-            return jsonify(service.refresh(refresh_source))
-        except RefreshLimited as exc:
-            response = jsonify(error=str(exc), retry_after=exc.retry_after)
-            response.headers['Retry-After'] = str(exc.retry_after)
-            return response, 429
-        except SourceRefreshError as exc:
-            app.logger.warning('Prediction source refresh failed reason=%s', exc.code)
-            return jsonify(error=str(exc), error_code=exc.code), exc.http_status
-        except DataUnavailable:
-            app.logger.warning('Prediction refresh failed reason=prediction_unavailable')
-            return jsonify(error='Latest observations could not produce a valid forecast. The previous prediction is retained.', error_code='prediction_unavailable'), 503
-        except Exception as exc:
-            # Exception messages can contain upstream credentials; log type only.
-            app.logger.error('Unexpected prediction refresh failure (%s)', type(exc).__name__)
-            return jsonify(error='Prediction refresh failed; keeping the last successful forecast'), 500
 
     @app.get('/api/prediction/status')
     def status():

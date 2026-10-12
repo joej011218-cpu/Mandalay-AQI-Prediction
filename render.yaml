@@ -11,8 +11,6 @@ services:
         value: 3.11.11
       - key: DATABASE_URL
         sync: false
-      - key: DASHBOARD_REFRESH_TOKEN
-        sync: false
       - key: MODEL_DIR
         value: models/XGB_Mandalay_CPCB_Delta24_2026
       - key: MANDALAY_DASHBOARD_URL
