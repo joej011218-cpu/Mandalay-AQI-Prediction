@@ -1789,3 +1789,20 @@ tbody tr:hover {
 
 
 .data-freshness{font-size:12px;color:var(--text-muted);line-height:1.7;margin-bottom:18px}.data-freshness.stale{color:#E8823C}.summary-category[role="button"]:focus,.current-category[role="button"]:focus{outline:2px solid var(--text);outline-offset:3px}
+
+/* Optional manual refresh controls; automatic polling and chart styles are unchanged. */
+.prediction-refresh{display:flex;align-items:center;gap:20px;padding:20px;margin:18px 0 22px;border:1px solid var(--panel-border);border-radius:16px;background:var(--panel)}
+.prediction-refresh-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;min-height:48px;padding:14px 22px;border:1px solid #4698f5;border-radius:12px;background:#1769c2;color:#fff;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(23,105,194,.22);transition:background .15s,transform .15s,box-shadow .15s}
+.prediction-refresh-button:hover:not(:disabled){background:#1256a0;box-shadow:0 6px 18px rgba(23,105,194,.3)}
+.prediction-refresh-button:focus-visible{outline:3px solid var(--text);outline-offset:4px}
+.prediction-refresh-button:active:not(:disabled){transform:translateY(1px);box-shadow:none}
+.prediction-refresh-button:disabled{cursor:wait;opacity:.72;box-shadow:none}
+.prediction-refresh-icon{display:inline-block;font-size:24px;line-height:1;width:24px;height:24px}
+.prediction-refresh-button[aria-busy="true"] .prediction-refresh-icon{font-size:0;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;box-sizing:border-box;animation:prediction-spin .8s linear infinite}
+.prediction-refresh-status{min-width:0;color:var(--text);font-size:14px;line-height:1.6}
+.prediction-refresh-status .data-freshness{margin:4px 0 0}
+#predictionRefreshMessage[data-state="error"]{color:#E8823C}
+#predictionRefreshMessage[data-state="success"]{color:var(--text)}
+@keyframes prediction-spin{to{transform:rotate(360deg)}}
+@media(max-width:640px){.prediction-refresh{align-items:stretch;flex-direction:column;gap:12px;padding:16px}.prediction-refresh-button{width:100%}.prediction-refresh-status{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.prediction-refresh-button{transition:none}.prediction-refresh-button[aria-busy="true"] .prediction-refresh-icon{animation:none}}

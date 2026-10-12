@@ -312,13 +312,10 @@ function drawForecastChart(
     document.getElementById(
       "forecastChart"
     );
-  const labels =
-    predictions.map(
-      prediction =>
-        "+"
-        + prediction.horizon_hours
-        + "h"
-    );
+  const labels = predictions.map(prediction => [
+    "+"+prediction.horizon_hours+"h",
+    ...formatTime(prediction.forecast_timestamp).split(", ")
+  ]);
   const values =
     predictions.map(
       prediction =>
@@ -402,10 +399,7 @@ function drawForecastChart(
                     const index =
                       context[0]
                         .dataIndex;
-                    return formatTime(
-                      predictions[index]
-                        .forecast_timestamp
-                    );
+                    return "+"+predictions[index].horizon_hours+"h · "+formatTime(predictions[index].forecast_timestamp)+" (Asia/Yangon)";
                   },
                 afterBody:
                   function(context) {
@@ -441,7 +435,8 @@ function drawForecastChart(
                 color:
                   textColor,
                 maxTicksLimit:
-                  12
+                  12,
+                maxRotation: 0
               },
               grid: {
                 color:
@@ -531,9 +526,10 @@ function displayForecastTable(
           +${prediction.horizon_hours}h
         </td>
         <td>
-          ${formatTime(
-            prediction.forecast_timestamp
-          )}
+          ${formatTime(prediction.forecast_timestamp).split(", ")[0]}
+        </td>
+        <td>
+          ${formatTime(prediction.forecast_timestamp).split(", ")[1] || "—"}
         </td>
         <td
           class="aqi-value"
@@ -703,8 +699,12 @@ async function loadForecast(manual=false) {
     const forecast=forecastResult.value;
     const predictions=(forecast.forecasts || []).map(item=>({...item,horizon_hours:Number(item.horizon),
       predicted_aqi:item.predicted_cpcb_aqi,forecast_timestamp:item.timestamp,forecast_origin:forecast.forecast_origin})).sort((a,b)=>a.horizon_hours-b.horizon_hours);
-    if(predictions.length!==24 || predictions.some((p,i)=>p.horizon_hours!==i+1 || !Number.isFinite(p.predicted_aqi))) {
-      loading.textContent="Incomplete forecast unavailable.";return;
+    if(predictions.length!==24 || predictions.some((p,i)=>p.horizon_hours!==i+1 || !Number.isFinite(p.predicted_aqi) ||
+        formatTime(p.forecast_timestamp)==="—" || Date.parse(p.forecast_timestamp)!==Date.parse(forecast.forecast_origin)+p.horizon_hours*3600000)) {
+      const warning="The backend returned an incomplete forecast or inconsistent target times. Keeping the previous prediction.";
+      errorBox.textContent=warning;errorBox.style.display="block";
+      setPredictionRefreshMessage("error",warning);
+      return;
     }
     current=current || forecast.latest_observation || forecast.current;
     displayCurrent(currentAdapter(current));
@@ -714,12 +714,13 @@ async function loadForecast(manual=false) {
     const message=refreshStatus==="cooldown"?"Showing the cached forecast; another source check is available in "+forecast.manual_refresh.retry_after+" seconds. ":
       refreshStatus==="unchanged"?"Source check completed; forecast inputs are unchanged. ":
       refreshStatus==="updated"?"Prediction updated successfully. ":"";
-    document.getElementById("predictionUpdate").textContent=message+"Last successful prediction update: "+formatTime(forecast.generated_at)+" (Asia/Yangon)";
+    document.getElementById("predictionUpdate").textContent="Last successful forecast generation: "+formatTime(forecast.generated_at)+" (Asia/Yangon)";
+    if(manual)setPredictionRefreshMessage(refreshStatus==="updated" || refreshStatus==="unchanged"?"success":"idle",message || "Forecast loaded; no completed source update was confirmed.");
     chartWrapper.style.display="block";
     if(typeof Chart!=="undefined") drawForecastChart(predictions);
     else {chartWrapper.style.display="none";errorBox.textContent="Chart library unavailable; forecasts remain in the table.";errorBox.style.display="block";}
     loading.style.display="none";
-    document.getElementById("forecastOrigin").textContent="Forecast origin: "+formatTime(forecast.forecast_origin)+" • Mandalay";
+    document.getElementById("forecastOrigin").textContent="Latest observation: "+formatTime(current.timestamp)+" • Forecast origin: "+formatTime(forecast.forecast_origin)+" • Generated: "+formatTime(forecast.generated_at)+" • All target times use Asia/Yangon. Targets are observation time +1 to +24 hours, not the button click time.";
     if(typeof Chart!=="undefined")errorBox.style.display="none";
     showFreshness(forecast,current);
   } else {
@@ -730,25 +731,34 @@ async function loadForecast(manual=false) {
     loading.style.display="block";
     errorBox.textContent="Data unavailable: "+warning+(lastDisplayedForecast?" • Displayed forecasts retain their original observation and generation times.":"");
     errorBox.style.display="block";
-    if(manual)document.getElementById("predictionUpdate").textContent="Prediction refresh failed. "+(lastDisplayedForecast?"Last successful prediction update: "+formatTime(lastDisplayedForecast.generated_at)+" (Asia/Yangon)":"No successful prediction loaded yet.");
+    if(manual)setPredictionRefreshMessage("error",warning+(lastDisplayedForecast?" Showing the last successful forecast.":""));
     showFreshness({...lastDisplayedForecast,warnings:[warning]},current || lastDisplayedForecast?.current);
   }
+}
+function setPredictionRefreshMessage(state,message) {
+  const el=document.getElementById("predictionRefreshMessage");
+  el.setAttribute("data-state",state);
+  el.textContent=message;
 }
 async function manualRefreshPrediction() {
   if(refreshInProgress) return;
   refreshInProgress=true;
   const button=document.getElementById("refreshPrediction");
   button.disabled=true;
-  button.textContent="Updating prediction...";
+  button.setAttribute("aria-busy","true");
+  document.getElementById("refreshPredictionLabel").textContent="Updating Prediction…";
+  setPredictionRefreshMessage("loading","Checking the latest observations and updating prediction…");
   try {
     await loadForecast(true);
   } catch(error) {
     const errorBox=document.getElementById("errorBox");
     errorBox.textContent="Prediction refresh failed. "+error.message+(lastDisplayedForecast?" Showing the last successful forecast.":"");
     errorBox.style.display="block";
+    setPredictionRefreshMessage("error","Prediction refresh failed. Showing the previous forecast.");
   } finally {
     button.disabled=false;
-    button.textContent="Refresh Prediction";
+    button.setAttribute("aria-busy","false");
+    document.getElementById("refreshPredictionLabel").textContent="Refresh Prediction";
     refreshInProgress=false;
   }
 }

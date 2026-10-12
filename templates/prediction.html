@@ -31,8 +31,16 @@
 <a class="nav-link" href="{{ vadodara_url }}">Vadodara Dashboard</a>
 <a class="nav-link" href="/precautions.html">AQI Categories &amp; Precautions</a>
 </nav>
-  <button id="refreshPrediction" class="theme-toggle" type="button">Refresh Prediction</button>
-  <div id="predictionUpdate" class="data-freshness" role="status" aria-live="polite"></div>
+  <section class="prediction-refresh" aria-label="Manual prediction update">
+    <button id="refreshPrediction" class="prediction-refresh-button" type="button" aria-busy="false" aria-describedby="predictionUpdate">
+      <span class="prediction-refresh-icon" aria-hidden="true">↻</span>
+      <span id="refreshPredictionLabel">Refresh Prediction</span>
+    </button>
+    <div class="prediction-refresh-status">
+      <div id="predictionRefreshMessage" role="status" aria-live="polite">Check the latest observations and update your forecast.</div>
+      <div id="predictionUpdate" class="data-freshness">Last successful forecast generation: —</div>
+    </div>
+  </section>
   <div id="dataFreshness" class="data-freshness" role="status" aria-live="polite">Mandalay, Myanmar · Checking data freshness…</div>
   <!-- ======================================================
        CURRENT CPCB REFERENCE
@@ -144,14 +152,15 @@
       1–24 Hour Forecast Results
     </div>
     <div class="panel-subtitle">
-      Hourly AQI predictions from the forecasting model
+      All 24 horizons · Target dates and times in Asia/Yangon, anchored to the latest observation
     </div>
     <div class="table-wrapper">
       <table>
         <thead>
           <tr>
             <th>Horizon</th>
-            <th>Forecast Time</th>
+            <th>Target Date</th>
+            <th>Target Time (Yangon)</th>
             <th>Predicted AQI</th>
             <th>Change</th>
             <th>Category</th>

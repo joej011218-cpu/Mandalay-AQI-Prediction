@@ -38,7 +38,9 @@ const run=code=>vm.runInContext(code,context);
     ['2026-10-10T12:00:00+06:30','10 Oct 2026, 12:00 PM'],
     ['2026-10-10T01:00:00+06:30','10 Oct 2026, 1:00 AM'],
     ['2026-10-10T13:00:00+06:30','10 Oct 2026, 1:00 PM'],
-    ['2026-10-10T06:30:00Z','10 Oct 2026, 1:00 PM']])assert.equal(run(`formatTime(${JSON.stringify(input)})`),expected);
+    ['2026-10-10T06:30:00Z','10 Oct 2026, 1:00 PM'],
+    ['2026-12-31T17:30:00Z','1 Jan 2027, 12:00 AM'],
+    ['2026-10-10T17:30:00Z','11 Oct 2026, 12:00 AM']])assert.equal(run(`formatTime(${JSON.stringify(input)})`),expected);
   assert.equal(run('formatTime("2026-10-10T13:00:00")'),'—');
   assert.match(document.getElementById('liveClock').innerHTML,/2:30:00 PM/);
   assert.equal(document.getElementById('currentAQI').textContent,'68.0');
@@ -46,7 +48,7 @@ const run=code=>vm.runInContext(code,context);
   for(const h of [1,6,12,24])assert.equal(document.getElementById('aqi'+h).textContent,fixture.forecasts[h-1].predicted_cpcb_aqi.toFixed(1));
   assert.equal(document.getElementById('forecastTableBody').children.length,24);
   assert.ok(document.getElementById('forecastTableBody').children.every(row=>/AM|PM/.test(row.innerHTML)));
-  assert.equal(run('forecastChart.data.datasets[0].data.length'),24);
+  assert.equal(run('forecastChart.data.datasets[0].data.length'),24);assert.match(run('forecastChart.data.labels[0].join(" " )'),/\+1h.*10 Oct 2026.*2:00 PM/);
   assert.match(run('forecastChart.options.plugins.tooltip.callbacks.title([{dataIndex:0}])'),/2:00 PM/);
   assert.equal(Chart.count,1);assert.equal(requests,2);
   const poll=timers.find(t=>t.ms===300000);assert.ok(poll);
@@ -74,22 +76,22 @@ const run=code=>vm.runInContext(code,context);
   const button=document.getElementById('refreshPrediction');
   const startCount=requests;
   const pending=button.listeners.click();
-  assert.equal(button.disabled,true);assert.equal(button.textContent,'Updating prediction...');
+  assert.equal(button.disabled,true);assert.equal(document.getElementById('refreshPredictionLabel').textContent,'Updating Prediction…');assert.equal(button.attributes['aria-busy'],'true');
   await button.listeners.click();await poll.fn();
   assert.equal(requests,startCount+1); // No duplicate manual or automatic fetch during update.
   const call=calls.at(-1);
   assert.equal(call.path,'/api/prediction/refresh');assert.equal(call.options.method,'POST');
   assert.equal(call.options.headers,undefined); // Server secret is never needed in the browser.
   release();await pending;manualGate=null;
-  assert.equal(button.disabled,false);assert.equal(button.textContent,'Refresh Prediction');
+  assert.equal(button.disabled,false);assert.equal(document.getElementById('refreshPredictionLabel').textContent,'Refresh Prediction');assert.equal(button.attributes['aria-busy'],'false');
   assert.equal(Chart.count,1);assert.equal(document.getElementById('forecastTableBody').children.length,24);
   const updateTime=document.getElementById('predictionUpdate').textContent;
-  assert.match(updateTime,/updated successfully.*1:00 PM.*Asia\/Yangon/);
+  assert.match(updateTime,/1:00 PM.*Asia\/Yangon/);assert.match(document.getElementById('predictionRefreshMessage').textContent,/updated successfully/);
   const previousValues=run('JSON.stringify(forecastChart.data.datasets[0].data)');
   outage=true;await button.listeners.click();
   assert.equal(run('JSON.stringify(forecastChart.data.datasets[0].data)'),previousValues);
   assert.match(document.getElementById('errorBox').textContent,/Test connection unavailable/);
-  assert.match(document.getElementById('predictionUpdate').textContent,/failed.*1:00 PM/);
+  assert.equal(document.getElementById('predictionUpdate').textContent,updateTime);assert.match(document.getElementById('predictionRefreshMessage').textContent,/Test connection unavailable/);
   assert.equal(button.disabled,false);
   assert.equal(errors.length,0);
   console.log('PASS: manual POST singleflight/loading/error retention and Yangon timestamps;  12-hour Myanmar times, current AQI/CO conversion, four cards, 24 rows, Chart update reuse/tooltips, modal clicks, theme persistence, 5-minute polling/coalescing, stale retention, null/error handling, precautions theme.');

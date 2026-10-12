@@ -56,6 +56,8 @@ def test_refresh_runs_real_24_models_then_reuses_unchanged_inputs(service, monke
     result = service.refresh(collector)
     assert result['manual_refresh']['status'] == 'updated'
     assert len(result['forecasts']) == 24 and predict.call_count == 2
+    assert all(pd.Timestamp(item['timestamp']) == pd.Timestamp(result['forecast_origin']) + pd.Timedelta(hours=item['horizon'])
+               for item in result['forecasts'])
     assert result['forecast_origin'] != before['forecast_origin']
     assert result['generated_at'].endswith('+06:30')
     cooldown = service.refresh(collector)
@@ -241,3 +243,32 @@ def test_missing_token_is_explicit_and_never_calls_network(monkeypatch):
     with pytest.raises(DataUnavailable, match='not configured'):
         source_refresh.refresh_source()
     opener.assert_not_called()
+
+
+@pytest.mark.parametrize('code', list(source_refresh.SourceRefreshError.REASONS))
+def test_http_reports_fixed_safe_source_failure_reason(service, monkeypatch, code, caplog):
+    error = source_refresh.SourceRefreshError(code)
+    monkeypatch.setattr(web, 'refresh_source', Mock(side_effect=error))
+    response = web.create_app(service).test_client().post('/api/prediction/refresh')
+    assert response.status_code == error.http_status
+    assert response.json == {'error': str(error), 'error_code': code}
+    assert code in caplog.text
+
+
+@pytest.mark.parametrize('origin', ['2026-10-10T23:00:00+06:30', '2026-12-31T23:00:00+06:30'])
+def test_real_model_targets_cross_midnight_and_year_without_generation_time_shift(service, monkeypatch, origin):
+    rows = copy.deepcopy(service.store.fetch.return_value)
+    delta = pd.Timestamp(origin) - pd.Timestamp(rows[-1]['timestamp'])
+    for row in rows:
+        row['timestamp'] = (pd.Timestamp(row['timestamp']) + delta).isoformat()
+    service.store.fetch.return_value = rows
+    class GenerationClock(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return (pd.Timestamp(origin) + pd.Timedelta(minutes=6)).to_pydatetime().astimezone(tz)
+    monkeypatch.setattr('prediction.service.datetime', GenerationClock)
+    result = service.forecast()
+    assert pd.Timestamp(result['forecasts'][0]['timestamp']) == pd.Timestamp(origin) + pd.Timedelta(hours=1)
+    assert pd.Timestamp(result['forecasts'][-1]['timestamp']) == pd.Timestamp(origin) + pd.Timedelta(hours=24)
+    assert pd.Timestamp(result['generated_at']).minute == 6
+    assert all(pd.Timestamp(item['timestamp']).minute == 0 for item in result['forecasts'])

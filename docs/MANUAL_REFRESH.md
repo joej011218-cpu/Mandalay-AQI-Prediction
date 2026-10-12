@@ -62,9 +62,52 @@ five minutes: it should reuse the forecast and report the remaining wait.
   including failures. During cooldown, a saved forecast returns HTTP 200 with
   `manual_refresh.status=cooldown`; without a saved forecast the response is 429.
 - Successful checks return `manual_refresh.status=updated` or `unchanged`.
-  Source/database/known inference failures return a sanitized HTTP 503; unexpected
-  failures return HTTP 500. The previous forecast and its generation time remain
+  Source failures return sanitized HTTP 502/503/504 diagnostics as listed below;
+  database/known inference failures return HTTP 503, and unexpected failures
+  return HTTP 500. The previous forecast and its generation time remain
   displayed. Automatic polling continues after the button finishes.
+
+The response now includes safe `error_code` diagnostics for source failures:
+
+| Code | HTTP | Action |
+| --- | --- | --- |
+| `dashboard_token_missing` | 503 | Set `DASHBOARD_REFRESH_TOKEN` on Prediction in Render. |
+| `dashboard_authorization_failed` | 503 | Securely verify it matches Dashboard's existing `REFRESH_TOKEN`. |
+| `dashboard_timeout` | 504 | Check Dashboard availability and retry after cooldown. |
+| `dashboard_unavailable` | 502 | Check Dashboard service status. |
+| `dashboard_not_completed` | 502 | Verify Dashboard runs its synchronous refresh deployment; 202 is not completion. |
+| `dashboard_invalid_response` | 502 | Check the Dashboard's response contract. |
+
+Render logs record only these reason codes. Upstream bodies, exception messages,
+tokens, and request headers are never logged or returned. The previous generic
+message obscured these causes, and a broad `ValueError` catch also masked the
+source client's own diagnostic errors. Those defects are corrected. Missing
+local credentials do not establish the cause of a live Render failure; use the
+actual deployed endpoint's error code to confirm that cause.
+
+## Forecast display and automatic workflow
+
+The refresh panel sits below navigation and above Current Air Quality, with
+responsive light/dark styling, keyboard focus, loading spinner, and a separate
+status message. All 24 rows show the horizon, target date, target Yangon time,
+AQI, category, and category color; the four summary cards remain. Chart labels
+and tooltips show target dates and times without changing the line styling.
+
+Each validated model configuration declares its horizon `h` and its target as
+future CPCB AQI minus current CPCB AQI. The service therefore computes targets
+as **latest hourly observation timestamp + h hours**. Generation time and click
+time never shift those targets. At a generation time of 9:06 PM with a 9:00 PM
+observation, +1h means 10:00 PM. If the observation is older, the old origin
+and stale-data warning remain visible rather than relabeling old forecasts.
+
+The Prediction repository contains no hourly collector/scheduler or durable
+background forecast job; its models run on demand against observations written
+by the existing Dashboard workflow. This change does not alter that external
+hourly source schedule or the existing five-minute/focus/visibility polling.
+Manual calls share Prediction's existing inference lock; they do not reset any
+external timer or cancel scheduled collection. PostgreSQL access in Prediction
+remains read-only, and the existing collector retains responsibility for atomic
+source writes and CPCB recalculation.
 
 ## Validation
 
@@ -72,6 +115,8 @@ five minutes: it should reuse the forecast and report the remaining wait.
 pip install -r requirements-dev.txt
 python -m pytest tests/test_manual_refresh.py -q
 node scripts/test_frontend.cjs
+# With a local Prediction server running; browser API responses are mocked:
+node scripts/test_browser.cjs
 python scripts/check_deployment.py
 python scripts/validate_models.py
 ```
@@ -81,6 +126,11 @@ actual 24 models, with mocked source/network/database boundaries. The fixture wa
 copied from the repository's existing validation branch at commit `cfe0fbac`.
 The JavaScript harness checks rendering, manual POST/loading/singleflight/error
 retention, unchanged chart reuse, Yangon times, and automatic polling.
+The Chromium checks exercise desktop/tablet/mobile in both themes, button hover
+and focus, spinner/disabled states, all 24 targets, midnight transitions, and
+failed refresh retention. Install Playwright locally when unavailable; the
+browser script uses `/usr/bin/chromium` or `CHROMIUM_PATH`. The default local
+server URL is `http://127.0.0.1:8015`, overridable with `PREDICTION_TEST_URL`.
 
 These checks do not establish live Dashboard authorization or Render deployment
 readiness. Those require the server-side token, live database binding, and the
