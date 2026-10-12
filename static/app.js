@@ -659,8 +659,8 @@ function displayCurrent(data) {
 /* ============================================================
    LOAD API DATA
 \============================================================ */
-async function readAPI(path) {
-  const response=await fetch(`${API_BASE}${path}`,{cache:"no-store",signal:AbortSignal.timeout(25000)});
+async function readAPI(path, method="GET") {
+  const response=await fetch(`${API_BASE}${path}`,{method,cache:"no-store",signal:AbortSignal.timeout(method==="POST"?110000:25000)});
   const data=await response.json();
   if(!response.ok) throw new Error(data.error || "Data service is temporarily unavailable");
   if(data.aqi_standard!=="Indian CPCB AQI" || data.calculation_version!=="cpcb-2014-rolling-v1" || data.city!=="Mandalay, Myanmar") throw new Error("Incompatible Mandalay CPCB data");
@@ -693,10 +693,12 @@ function clearCurrent() {
   for(const key of ["pm25","pm10","no2","o3","so2","co"])document.getElementById(key).textContent="—";
 }
 let lastDisplayedForecast=null;
-async function loadForecast() {
+async function loadForecast(manual=false) {
   const loading=document.getElementById("forecastLoading"),chartWrapper=document.getElementById("chartWrapper"),errorBox=document.getElementById("errorBox");
-  const [latestResult,forecastResult]=await Promise.allSettled([readAPI("/api/latest"),readAPI("/api/prediction")]);
-  let current=latestResult.status==="fulfilled"?latestResult.value.data:null;
+  const [latestResult,forecastResult]=await Promise.allSettled(manual?
+    [Promise.resolve(null),readAPI("/api/prediction/refresh","POST")]:
+    [readAPI("/api/latest"),readAPI("/api/prediction")]);
+  let current=latestResult.status==="fulfilled"?latestResult.value?.data:null;
   if(forecastResult.status==="fulfilled") {
     const forecast=forecastResult.value;
     const predictions=(forecast.forecasts || []).map(item=>({...item,horizon_hours:Number(item.horizon),
@@ -708,6 +710,11 @@ async function loadForecast() {
     displayCurrent(currentAdapter(current));
     displayForecastSummary(predictions);displayForecastTable(predictions);
     lastDisplayedForecast=forecast;
+    const refreshStatus=forecast.manual_refresh?.status;
+    const message=refreshStatus==="cooldown"?"Showing the cached forecast; another source check is available in "+forecast.manual_refresh.retry_after+" seconds. ":
+      refreshStatus==="unchanged"?"Source check completed; forecast inputs are unchanged. ":
+      refreshStatus==="updated"?"Prediction updated successfully. ":"";
+    document.getElementById("predictionUpdate").textContent=message+"Last successful prediction update: "+formatTime(forecast.generated_at)+" (Asia/Yangon)";
     chartWrapper.style.display="block";
     if(typeof Chart!=="undefined") drawForecastChart(predictions);
     else {chartWrapper.style.display="none";errorBox.textContent="Chart library unavailable; forecasts remain in the table.";errorBox.style.display="block";}
@@ -723,10 +730,30 @@ async function loadForecast() {
     loading.style.display="block";
     errorBox.textContent="Data unavailable: "+warning+(lastDisplayedForecast?" • Displayed forecasts retain their original observation and generation times.":"");
     errorBox.style.display="block";
+    if(manual)document.getElementById("predictionUpdate").textContent="Prediction refresh failed. "+(lastDisplayedForecast?"Last successful prediction update: "+formatTime(lastDisplayedForecast.generated_at)+" (Asia/Yangon)":"No successful prediction loaded yet.");
     showFreshness({...lastDisplayedForecast,warnings:[warning]},current || lastDisplayedForecast?.current);
   }
 }
-/* Read-only polling: no administrative refresh or database-write request. */
+async function manualRefreshPrediction() {
+  if(refreshInProgress) return;
+  refreshInProgress=true;
+  const button=document.getElementById("refreshPrediction");
+  button.disabled=true;
+  button.textContent="Updating prediction...";
+  try {
+    await loadForecast(true);
+  } catch(error) {
+    const errorBox=document.getElementById("errorBox");
+    errorBox.textContent="Prediction refresh failed. "+error.message+(lastDisplayedForecast?" Showing the last successful forecast.":"");
+    errorBox.style.display="block";
+  } finally {
+    button.disabled=false;
+    button.textContent="Refresh Prediction";
+    refreshInProgress=false;
+  }
+}
+document.getElementById("refreshPrediction").addEventListener("click",manualRefreshPrediction);
+/* Automatic polling continues to use the existing read-only APIs. */
 const PAGE_REFRESH_MS = 5 * 60 * 1000;
 let refreshInProgress = false;
 let lastPollAt=0;
